@@ -47,11 +47,28 @@ extension View {
     }
 }
 
+struct BigBlueFont: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.largeTitle)
+            .foregroundStyle(.blue)
+    }
+}
+
+extension View {
+    func makeBig() -> some View {
+        modifier(BigBlueFont())
+    }
+}
+
 struct ContentView: View {
     var body: some View {
-        Color.blue
-            .frame(width: 300, height: 200)
-            .waterMarked(with: "Swift")
+        ZStack {
+            Color.red
+                .ignoresSafeArea()
+            Text("Hellow!")
+        }
+        .makeBig()
     }
 }
 
