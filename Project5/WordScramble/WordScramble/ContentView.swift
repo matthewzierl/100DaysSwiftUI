@@ -17,6 +17,8 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
     
+    @State private var score = 0
+    
     
     var body: some View {
         NavigationStack {
@@ -36,6 +38,16 @@ struct ContentView: View {
             }
             
             .navigationTitle(rootWord)
+            .toolbar {
+                ToolbarItemGroup(placement: .topBarLeading) {
+                    Text("Score: \(score)")
+                }
+                ToolbarItemGroup {
+                    Button("Star Game") {
+                        startGame()
+                    }
+                }
+            }
             .onSubmit { // closure for when user presses return on keyboard
                 addNewWord()
             }
@@ -48,6 +60,12 @@ struct ContentView: View {
                 Text(errorMessage)
             }
         }
+    }
+    
+    func isValid(word: String) -> Bool {
+        guard word != rootWord else { return false }
+        guard word.count >= 3 else { return false }
+        return true
     }
     
     /*
@@ -88,13 +106,17 @@ struct ContentView: View {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) // lowercase, trim word
         guard answer.count > 0 else { return } // check it is not empty
         
-        // TODO: Word Validity
+        
         guard isOriginal(word: answer) else {
             wordError(title: "Word Used Already", message: "Be more original")
             return
         }
         guard isPossible(word: answer) else {
             wordError(title: "Word Not Possible", message: "Please use character set from \(rootWord)")
+            return
+        }
+        guard isValid(word: answer) else {
+            wordError(title: "Invalid Answer", message: "Word must be 3 characters or longer and not match the root word")
             return
         }
         guard isReal(word: answer) else {
@@ -105,6 +127,9 @@ struct ContentView: View {
         withAnimation { // make animation for insertion???
             usedWords.insert(answer, at: 0)
         }
+        
+        score += answer.count
+        
         newWord = "" // reset newWord
     }
     
@@ -120,6 +145,11 @@ struct ContentView: View {
                 // can convert contents to string
                 let wordBank = fileContents.components(separatedBy: "\n")
                 rootWord = wordBank.randomElement() ?? "FUCK"
+                
+                // clear any previous words
+                usedWords.removeAll()
+                score = 0
+                
                 return
                 
             }
