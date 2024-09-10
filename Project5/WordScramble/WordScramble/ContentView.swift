@@ -13,6 +13,10 @@ struct ContentView: View {
     @State private var rootWord = ""
     @State private var newWord = ""
     
+    @State private var errorTitle = ""
+    @State private var errorMessage = ""
+    @State private var showingError = false
+    
     
     var body: some View {
         NavigationStack {
@@ -38,6 +42,11 @@ struct ContentView: View {
             .onAppear {
                 startGame()
             }
+            .alert(errorTitle, isPresented: $showingError) {
+                Button("OK") { }
+            } message: {
+                Text(errorMessage)
+            }
         }
     }
     
@@ -62,11 +71,36 @@ struct ContentView: View {
         return true // made it thru all characters in word
     }
     
+    func isReal(word: String) -> Bool {
+        let checker = UITextChecker()
+        let range = NSRange(location: 0, length: word.utf16.count)
+        let missprelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
+        return missprelledRange.location == NSNotFound // nothing found
+    }
+    
+    func wordError(title: String, message: String) {
+        errorTitle = title
+        errorMessage = message
+        showingError = true
+    }
+    
     func addNewWord() {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) // lowercase, trim word
         guard answer.count > 0 else { return } // check it is not empty
         
         // TODO: Word Validity
+        guard isOriginal(word: answer) else {
+            wordError(title: "Word Used Already", message: "Be more original")
+            return
+        }
+        guard isPossible(word: answer) else {
+            wordError(title: "Word Not Possible", message: "Please use character set from \(rootWord)")
+            return
+        }
+        guard isReal(word: answer) else {
+            wordError(title: "Word Not Real", message: "Please make a real word")
+            return
+        }
         
         withAnimation { // make animation for insertion???
             usedWords.insert(answer, at: 0)
