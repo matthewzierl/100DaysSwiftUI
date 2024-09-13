@@ -29,6 +29,9 @@ struct ContentView: View {
     @State private var numTurns = 0
     @State private var showingEndGame = false
     
+    @State private var animationAmounts = [Double](repeating: 0, count: 3) // 3 flags
+    @State private var shouldFade = [Bool](repeating: false, count: 3)
+    
     var body: some View {
         ZStack {
             RadialGradient(stops: [
@@ -56,9 +59,20 @@ struct ContentView: View {
                         Button {
                             // flag was tapped
                             flagTapped(number)
+                            withAnimation(.bouncy(duration: 1.5)) {
+                                animationAmounts[number] += 360
+                                for index in 0..<3 {
+                                    shouldFade[index] = index != number
+                                }
+
+                            }
                         } label: {
                             CountryImage(flag: Image(countries[number]))
                         }
+                        .rotation3DEffect(
+                            .degrees(animationAmounts[number]), axis: (x: 0, y: 1, z: 0)
+                        )
+                        .opacity(shouldFade[number] ? 0.25 : 1.0)
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -111,6 +125,11 @@ struct ContentView: View {
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0 ..< 2)
+        withAnimation {
+            for (index, bool) in shouldFade.enumerated() {
+                shouldFade[index] = false
+            }
+        }
     }
 }
 
