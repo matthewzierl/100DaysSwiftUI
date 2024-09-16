@@ -11,6 +11,7 @@
 		B5C392CA2C94D258009DB54A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C392C92C94D258009DB54A /* ContentView.swift */; };
 		B5C392CC2C94D259009DB54A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5C392CB2C94D259009DB54A /* Assets.xcassets */; };
 		B5C392CF2C94D259009DB54A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5C392CE2C94D259009DB54A /* Preview Assets.xcassets */; };
+		B5C392D62C97DD86009DB54A /* QuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C392D52C97DD86009DB54A /* QuestionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		B5C392C92C94D258009DB54A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B5C392CB2C94D259009DB54A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B5C392CE2C94D259009DB54A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		B5C392D52C97DD86009DB54A /* QuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +55,7 @@
 			children = (
 				B5C392C72C94D258009DB54A /* MathTablesApp.swift */,
 				B5C392C92C94D258009DB54A /* ContentView.swift */,
+				B5C392D52C97DD86009DB54A /* QuestionView.swift */,
 				B5C392CB2C94D259009DB54A /* Assets.xcassets */,
 				B5C392CD2C94D259009DB54A /* Preview Content */,
 			);
@@ -138,6 +141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5C392CA2C94D258009DB54A /* ContentView.swift in Sources */,
+				B5C392D62C97DD86009DB54A /* QuestionView.swift in Sources */,
 				B5C392C82C94D258009DB54A /* MathTablesApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
