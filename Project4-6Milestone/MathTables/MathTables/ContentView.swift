@@ -17,8 +17,8 @@ struct ContentView: View {
     @State private var bodyTimer: Timer? = nil
     @State private var scaleTimer: Timer? = nil
     @State private var isBodyExpanding = true
-    @State private var rotationBody: Double = -10
-    @State private var isRotatingForward = true
+    @State private var rotationBody: Double = 3
+    @State private var isRotatingForward = false
     @State private var bodyScaleEffect: Double = 1.0
     @State private var leftEyeAnimation: Double = 0.0
     @State private var rightEyeAnimation: Double = 1.0
@@ -76,6 +76,7 @@ struct ContentView: View {
                             .background(.white)
                         HStack {
                             Text("\(tableOperator)")
+                                .foregroundStyle(.black)
                             Spacer()
                             Picker("Operator", selection: $tableOperator) {
                                 Text("+")
@@ -101,10 +102,11 @@ struct ContentView: View {
                             .foregroundStyle(.gray)
                             .background(.white)
                         HStack {
-                            Text("1 - \(range)")
+                            Text("0 - \(range)")
+                                .foregroundStyle(.black)
                             Spacer()
                             Picker("Number Range", selection: $range) {
-                                ForEach(2 ..< 13) { num in
+                                ForEach(1 ..< 13) { num in
                                     Text("\(num)").tag(num)
                                 }
                             }
@@ -123,6 +125,7 @@ struct ContentView: View {
                             .background(.white)
                         HStack {
                             Text("\(numQuestions) questions")
+                                .foregroundStyle(.black)
                             Spacer()
                             Picker("Num Questions", selection: $numQuestions) {
                                 Text("5").tag(5)
@@ -130,6 +133,7 @@ struct ContentView: View {
                                 Text("20").tag(20)
                             }
                             .pickerStyle(.segmented) // Segmented control for picker
+                            .foregroundStyle(.black)
                         }
                         .padding()
                         .frame(width: 300, height: 40)
@@ -139,9 +143,7 @@ struct ContentView: View {
                     .clipShape(RoundedRectangle(cornerSize: CGSize(width: 10, height: 30)))
                     .shadow(color: Color.black.opacity(0.3), radius: 5, x: 4, y: 4)
                     
-                    Button( action: {
-                        // Start Questions
-                    }, label: {
+                    NavigationLink(destination: QuestionView(questionOperator: tableOperator, range: range, index: 0, totalQuestions: numQuestions)) {
                         Text("Enter")
                             .font(.headline)
                             .frame(width: 80, height: 40)
@@ -149,7 +151,7 @@ struct ContentView: View {
                             .foregroundStyle(.black)
                             .clipShape(.capsule)
                             .shadow(color: Color.black.opacity(0.3), radius: 5, x: 4, y: 4)
-                    })
+                    }
                 }
             }
             .navigationTitle("MonsterTables")
@@ -164,6 +166,10 @@ struct ContentView: View {
                 }
             }
             .onAppear() {
+                withAnimation(.bouncy(duration: 5, extraBounce: 0.2)) {
+                    rotationBody = -3
+                    isRotatingForward.toggle()
+                }
                 startBodyTimer()
             }
             .onDisappear() {
@@ -175,7 +181,7 @@ struct ContentView: View {
     func startBodyTimer() {
         bodyTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
             withAnimation(.bouncy(duration: 5, extraBounce: 0.2)) {
-                // rotationBody starts at -10
+                // rotationBody starts at -3
                 rotationBody = isRotatingForward ? 3 : -3
                 isRotatingForward.toggle()
                 
