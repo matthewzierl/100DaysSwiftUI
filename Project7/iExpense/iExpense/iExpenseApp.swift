@@ -11,8 +11,8 @@ import SwiftUI
 struct iExpenseApp: App {
     var body: some Scene {
         WindowGroup {
-//            ContentView()
-            Materials()
+            ContentView()
+//            Materials()
         }
     }
 }
