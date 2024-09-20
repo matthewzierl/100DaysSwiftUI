@@ -11,7 +11,7 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var sample: String = ""
-    @State private var range: Int = 2
+    @State private var range: Int = 1
     @State private var numQuestions: Int = 5
     @State private var tableOperator: String = "Addition"
     @State private var bodyTimer: Timer? = nil

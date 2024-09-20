@@ -22,13 +22,22 @@ struct QuestionView: View {
     @State private var op2: Int = 0
     @State private var answer: Double = 0
     @State private var opSym: String = "+"
+    @State private var response: Double = -1
     
     
     var body: some View {
         ZStack {
+            
             LinearGradient(colors: [.white, Color(red: Double.random(in: 0 ... 1), green: Double.random(in: 0 ... 1), blue: Double.random(in: 0 ... 1))], startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
+            
             VStack {
+                
+                MilestoneProgressView(count: Float(totalQuestions), progress: CGFloat(Double(index) / Double(totalQuestions)))
+                    .frame(height: 100)
+                    .background(.yellow)
+                    .clipShape(.rect)
+                
                 
                 ZStack {
                     Image(allBodies.randomElement()!)
@@ -62,18 +71,37 @@ struct QuestionView: View {
 //                )
 //                .scaleEffect(CGSize(width: bodyScaleEffect, height: bodyScaleEffect))
                 
-                
                 Text("\(op1) \(opSym) \(op2)")
                     .font(.largeTitle)
                 
-                Spacer()
+                HStack {
+                    TextField("Answer...", value: $response, format: .number)
+                        .font(.headline)
+                        .frame(width: 80, height: 35)
+                        .background(.white)
+                        .foregroundStyle(.black)
+                        .clipShape(.buttonBorder)
+                        .shadow(color: Color.black.opacity(0.3), radius: 5, x: 4, y: 4)
+                        .keyboardType(.decimalPad)
+                    Button("Submit") {
+                        
+                    }
+                    .font(.headline)
+                    .frame(width: 80, height: 35)
+                    .background(.white)
+                    .foregroundStyle(.black)
+                    .clipShape(.buttonBorder)
+                    .shadow(color: Color.black.opacity(0.3), radius: 5, x: 4, y: 4)
+                }
                 
-                Text("Answer: \(answer.formatted())")
+                Spacer()
+
             }
         }
         .onAppear(perform: {
             generateQuestion()
         })
+        .ignoresSafeArea()
             
     }
     
