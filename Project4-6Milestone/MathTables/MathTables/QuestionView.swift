@@ -5,73 +5,74 @@
 //  Created by Matthew Zierl on 9/15/24.
 //
 
-import Foundation
 import SwiftUI
 
-struct QuestionView: View {
+struct RandomMonster: View {
     
-    var questionOperator: String
-    var range: Int // top of range, starting from
-    var index: Int
-    var totalQuestions: Int
     var allBodies = ["body_darkF", "body_yellowF", "body_greenF", "body_redF", "body_blueF"]
     var allEyes = ["eye_yellow", "eye_red", "eye_human", "eye_human_red", "eye_human_green", "eye_human_blue", "eye_cute_light"]
     var allMouths = ["mouthA", "mouthB", "mouthC", "mouthD", "mouthE", "mouthF", "mouthG", "mouthH", "mouthI", "mouthJ"]
     
-    @State private var op1: Int = 0
-    @State private var op2: Int = 0
-    @State private var answer: Double = 0
-    @State private var opSym: String = "+"
-    @State private var response: Double = -1
+    var body: some View {
+        ZStack {
+            Image(allBodies.randomElement()!)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 300, height: 300)
+                .rotationEffect(.degrees(-90))
+            
+            VStack {
+                HStack {
+                    Image(allEyes.randomElement()!)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 80, height: 80)
+                    Image(allEyes.randomElement()!)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 80, height: 80)
+                }
+                .offset(y: 20)
+                Image(allMouths.randomElement()!)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 80, height: 80)
+            }
+        }
+    }
+}
+
+
+struct QuestionView: View {
     
+    @State var monsterTableViewModel: MonsterTableViewModel
+    
+    @Binding var navigationPath: NavigationPath
+    
+    let randColor = Color(red: CGFloat.random(in: 0...1), green: CGFloat.random(in: 0...1), blue: CGFloat.random(in: 0...1))
+    
+    @State private var response: Double?
+    
+    @State private var isCorrect = false
+    @State private var showCheckMark = false
+    @State private var showXMark = false
+    @State private var showAnotherQuestion = false
+    @State private var allQuestionsAnswered = false
     
     var body: some View {
         ZStack {
-            
-            LinearGradient(colors: [.white, Color(red: Double.random(in: 0 ... 1), green: Double.random(in: 0 ... 1), blue: Double.random(in: 0 ... 1))], startPoint: .top, endPoint: .bottom)
+            LinearGradient(colors: [.white, randColor], startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
             
             VStack {
-                
-                MilestoneProgressView(count: Float(totalQuestions), progress: CGFloat(Double(index) / Double(totalQuestions)))
+                MilestoneProgressView(count: Float(monsterTableViewModel.numQuestions), progress: CGFloat(Double(monsterTableViewModel.currentQuestion) / Double(monsterTableViewModel.numQuestions)))
                     .frame(height: 100)
-                    .background(.yellow)
+                    .padding(EdgeInsets(top: 80, leading: 5, bottom: 0, trailing: 5))
                     .clipShape(.rect)
                 
+                RandomMonster()
                 
-                ZStack {
-                    Image(allBodies.randomElement()!)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 300, height: 300)
-                        .rotationEffect(.degrees(-90))
-                    VStack {
-                        HStack {
-                            Image(allEyes.randomElement()!)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 80, height: 80)
-//                                .rotationEffect(.degrees(leftEyeAnimation))
-                            Image(allEyes.randomElement()!)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 80, height: 80)
-//                                .scaleEffect(CGSize(width: rightEyeAnimation, height: rightEyeAnimation))
-                        }
-                        .offset(y: 20)
-                        Image(allMouths.randomElement()!)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 80, height: 80)
-//                            .scaleEffect(CGSize(width: mouthAnimation, height: mouthAnimation))
-                    }
-                }
-//                .rotation3DEffect(
-//                    .degrees(rotationBody), axis: (x: 0, y: 0, z: 1)
-//                )
-//                .scaleEffect(CGSize(width: bodyScaleEffect, height: bodyScaleEffect))
-                
-                Text("\(op1) \(opSym) \(op2)")
+                Text("\(monsterTableViewModel.allQuestions[monsterTableViewModel.currentQuestion].op1) \(monsterTableViewModel.allQuestions[monsterTableViewModel.currentQuestion].opSym.rawValue) \(monsterTableViewModel.allQuestions[monsterTableViewModel.currentQuestion].op2)")
                     .font(.largeTitle)
                 
                 HStack {
@@ -83,8 +84,28 @@ struct QuestionView: View {
                         .clipShape(.buttonBorder)
                         .shadow(color: Color.black.opacity(0.3), radius: 5, x: 4, y: 4)
                         .keyboardType(.decimalPad)
+                    
                     Button("Submit") {
+                        guard let response = response else { return }
                         
+                        if response == monsterTableViewModel.allQuestions[monsterTableViewModel.currentQuestion].answer {
+                            isCorrect = true
+                            withAnimation { showCheckMark = true }
+                        } else {
+                            isCorrect = false
+                            withAnimation { showXMark = true }
+                        }
+                        
+                        // Delay to show animation before moving to the next question
+                        if monsterTableViewModel.currentQuestion == monsterTableViewModel.numQuestions - 1 {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                allQuestionsAnswered = true
+                            }
+                        } else {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                showAnotherQuestion = true
+                            }
+                        }
                     }
                     .font(.headline)
                     .frame(width: 80, height: 35)
@@ -94,45 +115,55 @@ struct QuestionView: View {
                     .shadow(color: Color.black.opacity(0.3), radius: 5, x: 4, y: 4)
                 }
                 
+                if showCheckMark {
+                    Image(systemName: "checkmark.circle")
+                        .font(.largeTitle)
+                        .foregroundColor(.green)
+                        .transition(.scale)
+                } else if showXMark {
+                    Image(systemName: "xmark.circle")
+                        .font(.largeTitle)
+                        .foregroundColor(.red)
+                        .transition(.scale)
+                }
+                
                 Spacer()
-
+            }
+                
+            }
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItemGroup(placement: .topBarLeading) {
+                Button("Back", systemImage: "house") {
+                    // go back to main
+                    navigationPath.removeLast(navigationPath.count) // Pops back to root
+                }
+            }
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                Button("Done", systemImage: "keyboard") {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
             }
         }
-        .onAppear(perform: {
-            generateQuestion()
-        })
         .ignoresSafeArea()
-            
     }
-    
-    func generateQuestion() {
-        switch questionOperator {
-        case "Addition":
-            op1 = Int.random(in: 0 ... range)
-            op2 = Int.random(in: 0 ... range)
-            answer = Double(op1 + op2)
-            opSym = "+"
-        case "Subtraction":
-            op1 = Int.random(in: 1 ... range) // ensure non-negative
-            op2 = Int.random(in: 0 ... op1) // second operand is <= first
-            answer = Double(op1 - op2)
-            opSym = "-"
-        case "Multiplication":
-            op1 = Int.random(in: 0 ... range)
-            op2 = Int.random(in: 0 ... range)
-            answer = Double(op1 * op2)
-            opSym = "*"
-        case "Division":
-            op1 = Int.random(in: 0 ... range)
-            op2 = Int.random(in: 1 ... range) // can't be zero
-            answer = Double(op1) / Double(op2)
-            opSym = "÷"
-        default:
-            fatalError("Could not decipher question operator")
-        }
-    }
+    //        .navigationDestination(isPresented: $showAnotherQuestion) {
+    //            QuestionView(questionOperator: questionOperator, range: range, index: index + 1, totalQuestions: totalQuestions)
+    //        }
+    //        .navigationDestination(isPresented: $allQuestionsAnswered) {
+    //            CompletionView()
+    //        }
 }
 
-#Preview {
-    QuestionView(questionOperator: "Multiplication", range: 10, index: 0, totalQuestions: 5)
+
+struct CompletionView: View {
+    var body: some View {
+        Text("All questions answered!")
+            .font(.largeTitle)
+            .padding()
+    }
 }
+//
+//#Preview {
+//    QuestionView(monsterTableViewModel: MonsterTableViewModel(tableOperator: TableOperator.Multiplication, maxRange: 12, numQuestions: 5), navigationPath: <#Binding<NavigationPath>#>)
+//}

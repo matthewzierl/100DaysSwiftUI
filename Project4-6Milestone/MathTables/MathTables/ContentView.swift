@@ -7,13 +7,91 @@
 
 import SwiftUI
 
+enum TableOperator: String {
+    case Addition = "+"
+    case Subtraction = "-"
+    case Multiplication = "*"
+    case Division = "÷"
+    case Random = "?" // for later
+}
+
+struct Question {
+    let op1: Int
+    let op2: Int
+    let opSym: TableOperator
+    var answer: Double
+    let index: Int
+}
+
+@Observable class MonsterTableViewModel {
+    
+    let tableOperator: TableOperator
+    let maxRange: Int
+    let numQuestions: Int
+    var currentQuestion = 0
+    
+    var allQuestions = [Question]()
+    
+    init(tableOperator: TableOperator, maxRange: Int, numQuestions: Int) {
+        self.tableOperator = tableOperator
+        self.maxRange = maxRange
+        self.numQuestions = numQuestions
+        createQuestionSet()
+    }
+    
+    
+    func createQuestionSet() {
+        
+        for index in 0 ..< numQuestions {
+    
+            var question: Question?
+            
+            switch tableOperator {
+            case .Addition:
+                
+                let op1 = Int.random(in: 0 ... maxRange)
+                let op2 = Int.random(in: 0 ... maxRange)
+                
+                question = Question(op1: op1, op2: op2, opSym: tableOperator, answer: Double(op1 + op2), index: index)
+                
+            case .Subtraction:
+                
+                let op1 = Int.random(in: 0 ... maxRange)
+                let op2 = Int.random(in: 0 ... op1) // no negatives
+                
+                question = Question(op1: op1, op2: op2, opSym: tableOperator, answer: Double(op1 - op2), index: index)
+                
+            case .Multiplication:
+                
+                let op1 = Int.random(in: 0 ... maxRange)
+                let op2 = Int.random(in: 0 ... maxRange)
+                question = Question(op1: op1, op2: op2, opSym: tableOperator, answer: Double(op1 * op2), index: index)
+                
+            case .Division:
+                let op1 = Int.random(in: 0 ... maxRange)
+                let op2 = Int.random(in: 1 ... maxRange) // no divide by 0
+                question = Question(op1: op1, op2: op2, opSym: tableOperator, answer: Double(op1 / op2), index: index)
+            case .Random:
+                // TODO: implement random
+                break
+            }
+            
+            if let question = question {
+                allQuestions.append(question)
+            }
+        }
+    }
+}
+
 
 struct ContentView: View {
     
-    @State private var sample: String = ""
+    // for fields
     @State private var range: Int = 1
     @State private var numQuestions: Int = 5
-    @State private var tableOperator: String = "Addition"
+    @State private var tableOperator: TableOperator = TableOperator.Addition
+    
+    // animation vars
     @State private var bodyTimer: Timer? = nil
     @State private var scaleTimer: Timer? = nil
     @State private var isBodyExpanding = true
@@ -24,8 +102,11 @@ struct ContentView: View {
     @State private var rightEyeAnimation: Double = 1.0
     @State private var mouthAnimation: Double = 1.0
     
+    // path
+    @State private var navigationPath = NavigationPath()
+    
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             ZStack {
                 LinearGradient(colors: [.white, .green], startPoint: .top, endPoint: .bottom)
                     .ignoresSafeArea()
@@ -75,18 +156,18 @@ struct ContentView: View {
                             .foregroundStyle(.gray)
                             .background(.white)
                         HStack {
-                            Text("\(tableOperator)")
+                            Text(tableOperator.rawValue)
                                 .foregroundStyle(.black)
                             Spacer()
                             Picker("Operator", selection: $tableOperator) {
                                 Text("+")
-                                    .tag("Addition")
+                                    .tag(TableOperator.Addition)
                                 Text("-")
-                                    .tag("Subtraction")
+                                    .tag(TableOperator.Subtraction)
                                 Text("*")
-                                    .tag("Multiplication")
+                                    .tag(TableOperator.Multiplication)
                                 Text("÷")
-                                    .tag("Division")
+                                    .tag(TableOperator.Division)
                             }
                             .tint(.black)
                         }
@@ -143,18 +224,24 @@ struct ContentView: View {
                     .clipShape(RoundedRectangle(cornerSize: CGSize(width: 10, height: 30)))
                     .shadow(color: Color.black.opacity(0.3), radius: 5, x: 4, y: 4)
                     
-                    NavigationLink(destination: QuestionView(questionOperator: tableOperator, range: range, index: 0, totalQuestions: numQuestions)) {
-                        Text("Enter")
-                            .font(.headline)
-                            .frame(width: 80, height: 40)
-                            .background(.white)
-                            .foregroundStyle(.black)
-                            .clipShape(.capsule)
-                            .shadow(color: Color.black.opacity(0.3), radius: 5, x: 4, y: 4)
+                    Button("Enter") {
+                        navigationPath.append("firstQuestion")
                     }
+                    .font(.headline)
+                    .frame(width: 80, height: 40)
+                    .background(.white)
+                    .foregroundStyle(.black)
+                    .clipShape(.capsule)
+                    .shadow(color: Color.black.opacity(0.3), radius: 5, x: 4, y: 4)
+                    
                 }
             }
             .navigationTitle("MonsterTables")
+            .navigationDestination(for: String.self) { value in
+                if value == "firstQuestion" {
+                    QuestionView(monsterTableViewModel: MonsterTableViewModel(tableOperator: tableOperator, maxRange: range, numQuestions: numQuestions), navigationPath: $navigationPath)
+                }
+            }
             .onChange(of: tableOperator) { oldValue, newValue in
                 withAnimation(.spring(duration: 2, bounce: 0.6)) {
                     leftEyeAnimation -= 90
