@@ -114,26 +114,26 @@ struct ContentView: View {
                     ZStack {
                         Image("body_darkF")
                             .resizable()
-                            .aspectRatio(contentMode: .fit)
+                            .scaledToFit()
                             .frame(width: 300, height: 300)
                             .rotationEffect(.degrees(-90))
                         VStack {
                             HStack {
                                 Image("eye_human_blue")
                                     .resizable()
-                                    .aspectRatio(contentMode: .fit)
+                                    .scaledToFit()
                                     .frame(width: 80, height: 80)
                                     .rotationEffect(.degrees(leftEyeAnimation))
                                 Image("eye_human_red")
                                     .resizable()
-                                    .aspectRatio(contentMode: .fit)
+                                    .scaledToFit()
                                     .frame(width: 80, height: 80)
                                     .scaleEffect(CGSize(width: rightEyeAnimation, height: rightEyeAnimation))
                             }
                             .offset(y: 20)
                             Image("mouthD")
                                 .resizable()
-                                .aspectRatio(contentMode: .fit)
+                                .scaledToFit()
                                 .frame(width: 80, height: 80)
                                 .scaleEffect(CGSize(width: mouthAnimation, height: mouthAnimation))
                         }

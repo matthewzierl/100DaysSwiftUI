@@ -17,7 +17,7 @@ struct RandomMonster: View {
         ZStack {
             Image(allBodies.randomElement()!)
                 .resizable()
-                .aspectRatio(contentMode: .fit)
+                .scaledToFit()
                 .frame(width: 300, height: 300)
                 .rotationEffect(.degrees(-90))
             
@@ -25,17 +25,17 @@ struct RandomMonster: View {
                 HStack {
                     Image(allEyes.randomElement()!)
                         .resizable()
-                        .aspectRatio(contentMode: .fit)
+                        .scaledToFit()
                         .frame(width: 80, height: 80)
                     Image(allEyes.randomElement()!)
                         .resizable()
-                        .aspectRatio(contentMode: .fit)
+                        .scaledToFit()
                         .frame(width: 80, height: 80)
                 }
                 .offset(y: 20)
                 Image(allMouths.randomElement()!)
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .scaledToFit()
                     .frame(width: 80, height: 80)
             }
         }
