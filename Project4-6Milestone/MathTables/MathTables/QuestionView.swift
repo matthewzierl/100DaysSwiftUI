@@ -115,32 +115,35 @@ struct QuestionView: View {
                     .shadow(color: Color.black.opacity(0.3), radius: 5, x: 4, y: 4)
                 }
                 
-                if showCheckMark {
-                    Image(systemName: "checkmark.circle")
-                        .font(.largeTitle)
-                        .foregroundColor(.green)
-                        .transition(.scale)
-                } else if showXMark {
-                    Image(systemName: "xmark.circle")
-                        .font(.largeTitle)
-                        .foregroundColor(.red)
-                        .transition(.scale)
-                }
-                
                 Spacer()
             }
+            
+            if showCheckMark {
+                Image(systemName: "checkmark.circle")
+                    .font(.system(size: 200))
+                    .foregroundColor(.green)
+                    .offset(y: -80)
+                    .transition(.scale)
+            } else if showXMark {
+                Image(systemName: "xmark.circle")
+                    .font(.system(size: 200))
+                    .foregroundColor(.red)
+                    .offset(y: -80)
+                    .transition(.scale)
+            }
                 
             }
+        
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItemGroup(placement: .topBarLeading) {
-                Button("Back", systemImage: "house") {
+                Button("Home", systemImage: "house") {
                     // go back to main
                     navigationPath.removeLast(navigationPath.count) // Pops back to root
                 }
             }
             ToolbarItemGroup(placement: .topBarTrailing) {
-                Button("Done", systemImage: "keyboard") {
+                Button("Hide Keyboard", systemImage: "keyboard") {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
             }
@@ -164,6 +167,6 @@ struct CompletionView: View {
     }
 }
 //
-//#Preview {
-//    QuestionView(monsterTableViewModel: MonsterTableViewModel(tableOperator: TableOperator.Multiplication, maxRange: 12, numQuestions: 5), navigationPath: <#Binding<NavigationPath>#>)
-//}
+#Preview {
+    QuestionView(monsterTableViewModel: MonsterTableViewModel(tableOperator: TableOperator.Multiplication, maxRange: 12, numQuestions: 5), navigationPath: .constant(NavigationPath()))
+}

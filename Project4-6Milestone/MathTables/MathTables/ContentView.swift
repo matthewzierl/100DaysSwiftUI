@@ -15,7 +15,7 @@ enum TableOperator: String {
     case Random = "?" // for later
 }
 
-struct Question {
+struct Question: Hashable {
     let op1: Int
     let op2: Int
     let opSym: TableOperator
@@ -23,7 +23,8 @@ struct Question {
     let index: Int
 }
 
-@Observable class MonsterTableViewModel {
+
+class MonsterTableViewModel: ObservableObject {
     
     let tableOperator: TableOperator
     let maxRange: Int
@@ -104,6 +105,9 @@ struct ContentView: View {
     
     // path
     @State private var navigationPath = NavigationPath()
+    
+    // model
+    @StateObject var monsterTableViewModel: MonsterTableViewModel?
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -225,7 +229,11 @@ struct ContentView: View {
                     .shadow(color: Color.black.opacity(0.3), radius: 5, x: 4, y: 4)
                     
                     Button("Enter") {
-                        navigationPath.append("firstQuestion")
+                        
+                        // create model
+                        monsterTableViewModel = MonsterTableViewModel(tableOperator: tableOperator, maxRange: range, numQuestions: numQuestions)
+                        
+                        navigationPath.append(monsterTableViewModel?.allQuestions[monsterTableViewModel?.currentQuestion]) // append current question (starting at 0) to navigation path
                     }
                     .font(.headline)
                     .frame(width: 80, height: 40)
@@ -236,11 +244,12 @@ struct ContentView: View {
                     
                 }
             }
+            
+            
+            
             .navigationTitle("MonsterTables")
-            .navigationDestination(for: String.self) { value in
-                if value == "firstQuestion" {
-                    QuestionView(monsterTableViewModel: MonsterTableViewModel(tableOperator: tableOperator, maxRange: range, numQuestions: numQuestions), navigationPath: $navigationPath)
-                }
+            .navigationDestination(for: Question.self) { question in
+                QuestionView(monsterTableViewModel: monsterTableViewModel, navigationPath: $navigationPath)
             }
             .onChange(of: tableOperator) { oldValue, newValue in
                 withAnimation(.spring(duration: 2, bounce: 0.6)) {
