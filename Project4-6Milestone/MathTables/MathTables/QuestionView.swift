@@ -45,7 +45,7 @@ struct RandomMonster: View {
 
 struct QuestionView: View {
     
-    @State var monsterTableViewModel: MonsterTableViewModel
+    @ObservedObject var monsterTableViewModel: MonsterTableViewModel
     
     @Binding var navigationPath: NavigationPath
     
@@ -56,7 +56,6 @@ struct QuestionView: View {
     @State private var isCorrect = false
     @State private var showCheckMark = false
     @State private var showXMark = false
-    @State private var showAnotherQuestion = false
     @State private var allQuestionsAnswered = false
     
     var body: some View {
@@ -103,7 +102,9 @@ struct QuestionView: View {
                             }
                         } else {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                showAnotherQuestion = true
+                                // increment and show another question
+                                monsterTableViewModel.currentQuestion += 1
+                                navigationPath.append(monsterTableViewModel.allQuestions[monsterTableViewModel.currentQuestion])
                             }
                         }
                     }
@@ -149,6 +150,9 @@ struct QuestionView: View {
             }
         }
         .ignoresSafeArea()
+//        .navigationDestination(for: Question.self) { question in
+//            QuestionView(monsterTableViewModel: monsterTableViewModel, navigationPath: $navigationPath)
+//        }
     }
     //        .navigationDestination(isPresented: $showAnotherQuestion) {
     //            QuestionView(questionOperator: questionOperator, range: range, index: index + 1, totalQuestions: totalQuestions)

@@ -26,9 +26,9 @@ struct Question: Hashable {
 
 class MonsterTableViewModel: ObservableObject {
     
-    let tableOperator: TableOperator
-    let maxRange: Int
-    let numQuestions: Int
+    var tableOperator: TableOperator
+    var maxRange: Int
+    var numQuestions: Int
     var currentQuestion = 0
     
     var allQuestions = [Question]()
@@ -107,7 +107,9 @@ struct ContentView: View {
     @State private var navigationPath = NavigationPath()
     
     // model
-    @StateObject var monsterTableViewModel: MonsterTableViewModel?
+    // @StateObject for initialization
+    // @ObservedObject if passed to another view
+    @StateObject var monsterTableViewModel = MonsterTableViewModel(tableOperator: .Addition, maxRange: 5, numQuestions: 5)
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -230,10 +232,13 @@ struct ContentView: View {
                     
                     Button("Enter") {
                         
-                        // create model
-                        monsterTableViewModel = MonsterTableViewModel(tableOperator: tableOperator, maxRange: range, numQuestions: numQuestions)
+                        // assign variables to model
+                        monsterTableViewModel.tableOperator = tableOperator
+                        monsterTableViewModel.maxRange = range
+                        monsterTableViewModel.numQuestions = numQuestions
+                        monsterTableViewModel.createQuestionSet()
                         
-                        navigationPath.append(monsterTableViewModel?.allQuestions[monsterTableViewModel?.currentQuestion]) // append current question (starting at 0) to navigation path
+                        navigationPath.append(monsterTableViewModel.allQuestions[monsterTableViewModel.currentQuestion]) // append current question (starting at 0) to navigation path
                     }
                     .font(.headline)
                     .frame(width: 80, height: 40)
@@ -271,6 +276,7 @@ struct ContentView: View {
             .onDisappear() {
                 stopBodyTimer()
             }
+            .preferredColorScheme(.light)
         }
     }
     
