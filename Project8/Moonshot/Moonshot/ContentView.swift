@@ -10,52 +10,40 @@ import SwiftUI
 struct ContentView: View {
     
     let astronauts: [String: Astronaut] = Bundle.main.decode("astronauts.json") // type annotation required for generic type methods
-    let missions: [Mission] = Bundle.main.decode("missions.json")
+    let missions: [Mission] = Bundle.main.decode("missions.json") // uses generic method to accomplish each call
     
-    let columns = [
-        GridItem(.adaptive(minimum: 150))
-    ]
+    
+    
+    @State var isGrid = true
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVGrid(columns: columns) {
-                    ForEach(missions) { mission in
-                        NavigationLink {
-                            MissionView(mission: mission, astronauts: astronauts)
-                        } label: {
-                            VStack {
-                                Image(mission.image)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 100, height: 100)
-                                    .padding()
-                                VStack {
-                                    Text(mission.displayName)
-                                        .font(.headline)
-                                        .foregroundStyle(.white)
-                                    Text(mission.formattedLaunchDate)
-                                        .font(.caption)
-                                        .foregroundStyle(.gray)
-                                }
-                                .padding(.vertical)
-                                .frame(maxWidth: .infinity)
-                                .background(.lightBackground)
-                            }
-                            .clipShape(.rect(cornerRadius: 10))
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(.lightBackground)
-                            }
-                            
-                        }
-                    }
+            
+            Group {
+                if isGrid { // grid view
+                    MissionsGridView(astronauts: astronauts, missions: missions)
+                } else { // list view
+                    MissionsListView(astronauts: astronauts, missions: missions)
                 }
-                .padding([.horizontal, .bottom])
             }
             .navigationTitle("Moonshot")
             .background(.darkBackground)
             .preferredColorScheme(.dark)
+            .toolbar {
+                if isGrid {
+                    Button("List", systemImage: "list.bullet") {
+                        // change to list view
+                        
+                        isGrid = false
+                    }
+                } else {
+                    Button("Grid", systemImage: "square.grid.2x2") {
+                        // change to grid view
+                        isGrid = true
+                    }
+                }
+                
+            }
         }
     }
 }
