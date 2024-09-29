@@ -90,7 +90,7 @@ class PathStore {
 
 struct Materials: View {
     
-    // start with 'state' and if shared in other struct/class use 'binding'?
+    // start with 'state' and if shared in other struct/class use 'bi 
     @State private var pathStore = PathStore()
     
     var body: some View {
