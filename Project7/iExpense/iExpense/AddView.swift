@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddView: View {
     
-    @State private var name: String = ""
+    @State private var name: String = "Untitled"
     @State private var type: String = "Personal"
     @State private var amount: Double = 0.0
     @State private var isShowingAlert = false
@@ -23,8 +23,6 @@ struct AddView: View {
     var body: some View {
         NavigationStack {
             Form {
-                TextField("Name", text: $name)
-                
                 Picker("\(type)", selection: $type) {
                     ForEach(types, id: \.self) { type in
                         Text("\(type)")
@@ -36,20 +34,29 @@ struct AddView: View {
             }
             
             .toolbar {
-                Button("Submit") {
-                    guard name != "" else {
-                        isShowingAlert.toggle()
-                        return
+                ToolbarItem(placement: .confirmationAction){
+                    Button("Submit") {
+                        guard name != "" else {
+                            isShowingAlert.toggle()
+                            return
+                        }
+                        let item = ExpenseItem(name: name, type: type, amount: amount)
+                        expenses.items.append(item)
+                        dismiss()
                     }
-                    let item = ExpenseItem(name: name, type: type, amount: amount)
-                    expenses.items.append(item)
-                    dismiss()
+                }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
                 }
             }
-            .navigationTitle("Add New Expense")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle($name)
             .alert("Please Fill In All Fields", isPresented: $isShowingAlert) {
                 Button("Okay") { }
             }
+            .navigationBarBackButtonHidden()
         }
     }
 }

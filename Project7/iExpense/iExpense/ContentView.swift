@@ -91,14 +91,20 @@ struct ContentView: View {
             
             .navigationTitle("iExpense")
             .toolbar {
-                Button("Add Expense", systemImage: "plus") {
-                    isShowingAddExpense.toggle()
+//                Button("Add Expense", systemImage: "plus") {
+//                    isShowingAddExpense.toggle()
+//                }
+                NavigationLink {
+                    AddView(expenses: expenses)
+                } label: {
+                    Image(systemName: "plus")
                 }
+
             }
-            .sheet(isPresented: $isShowingAddExpense) {
-                // show an AddView
-                AddView(expenses: expenses)
-            }
+//            .sheet(isPresented: $isShowingAddExpense) {
+//                // show an AddView
+//                AddView(expenses: expenses)
+//            }
         }
         
     }
