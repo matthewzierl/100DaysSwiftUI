@@ -12,9 +12,9 @@ struct AddHabit: View {
     @Binding var habits: [Habit]
     
     @State private var name: String = "Untitled"
-    @State private var goal: Int = 10
+    @State private var goal: Double = 10
     @State private var description: String = ""
-    @State private var color: Color = .gray
+    @State private var color: Color = .blue
     
     @State private var untitledAlertIsShowing: Bool = false
     
@@ -28,7 +28,7 @@ struct AddHabit: View {
                     ColorPicker("Color", selection: $color)
                 }
                 Section("Goal"){
-                    Stepper("\(goal) minutes", value: $goal, in: 10 ... 720, step: 10)
+                    Stepper("\(Int(goal)) minutes", value: $goal, in: 10 ... 720, step: 10)
                 }
                 Section("Description") {
                     TextEditor(text: $description)
