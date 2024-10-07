@@ -18,18 +18,18 @@ struct ContentView: View {
     ]
     
     @State private var addHabitSheet = false
+    @State private var timeBank: TimeInterval = 0
     
     
     var body: some View {
         NavigationStack {
             VStack {
                 HabitGalleryView(habits: $habits)
-                Spacer()
             }
             .navigationTitle("HabitTracker")
             .navigationDestination(for: Habit.self) { habit in
                 if let index = habits.firstIndex(where: { $0.id == habit.id }) {
-                    HabitDetailView(habit: $habits[index])
+                    HabitDetailView(habit: $habits[index], timeBank: $timeBank)
                 }
             }
             .toolbar {

@@ -52,7 +52,7 @@ struct ProgressView: View {
         .frame(width: 100, height: 100)
         .background(.lightBackground)
         .clipShape(.rect(cornerRadii: RectangleCornerRadii(topLeading: 20, bottomLeading: 20, bottomTrailing: 20, topTrailing: 20)))
-        .shadow(radius: 1)
+        .shadow(color: .white, radius: 2)
     }
 }
 

@@ -20,7 +20,8 @@ struct HabitGalleryView: View {
                     NavigationLink(value: habit) {
                         if let index = habits.firstIndex(where: { $0.id == habit.id }) {
                             ProgressView(habit: $habits[index])
-                                .background()
+                                .padding(.top, 2)
+                                .padding(.bottom, 2)
                         }
                     }
                 }
