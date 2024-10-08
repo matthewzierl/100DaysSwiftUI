@@ -1,15 +1,15 @@
 //
-//  AddHabit.swift
+//  EditHabit.swift
 //  HabitTracker
 //
-//  Created by Matthew Zierl on 10/1/24.
+//  Created by Matthew Zierl on 10/8/24.
 //
 
 import SwiftUI
 
-struct AddHabit: View {
+struct EditHabit: View {
     
-    @Binding var habits: [Habit]
+    @Binding var habit: Habit
     
     @State private var name: String = "Untitled"
     @State private var goal: Double = 10
@@ -32,7 +32,7 @@ struct AddHabit: View {
                 }
                 Section("Description") {
                     TextEditor(text: $description)
-                        .frame(height: 200)
+                        .frame(height: 250)
                 }
             }
             .toolbarTitleDisplayMode(.inline)
@@ -43,19 +43,33 @@ struct AddHabit: View {
                         dismiss()
                     }
                 }
+                ToolbarItem(placement: .destructiveAction) {
+                    Button("Delete") {
+                        
+                    }
+                }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Submit") {
                         guard name != "" && name != "Untitled" else {
                             untitledAlertIsShowing.toggle()
                             return
                         }
-                        habits.append(Habit(name: name, goal: goal, progress: 0, color: HabitColor(color: color), description: description))
+                        habit.name = name
+                        habit.goal = goal
+                        habit.description = description
+                        habit.color = HabitColor(color: color)
                         dismiss()
                     }
                 }
             }
             .alert("Please Provide a Name", isPresented: $untitledAlertIsShowing) {
                 Button("Okay", role: .cancel) { }
+            }
+            .onAppear {
+                name = habit.name
+                goal = habit.goal
+                description = habit.description
+                color = habit.color.toColor()
             }
         }
     }

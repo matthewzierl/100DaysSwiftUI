@@ -9,13 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-//    @State private var habits = [Habit]()
-    @State private var habits = [
-        Habit(name: "SwiftUI", goal: 10, progress: 4, color: .blue, description: "framework"),
-        Habit(name: "Gym", goal: 80, progress: 80, color: .red, description: "lift"),
-        Habit(name: "UIKit", goal: 60, progress: 50, color: .green, description: "other framework"),
-        Habit(name: "Japanese", goal: 160, progress: 110, color: .cyan, description: "Learn language")
-    ]
+    @State private var habits = AllHabits().habits
     
     @State private var addHabitSheet = false
     @State private var timeBank: TimeInterval = 0
@@ -25,6 +19,8 @@ struct ContentView: View {
         NavigationStack {
             VStack {
                 HabitGalleryView(habits: $habits)
+                LargeTimerView(timeBank: $timeBank)
+                Spacer()
             }
             .navigationTitle("HabitTracker")
             .navigationDestination(for: Habit.self) { habit in

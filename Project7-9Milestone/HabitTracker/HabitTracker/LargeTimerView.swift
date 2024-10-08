@@ -1,19 +1,15 @@
 //
-//  TimerView.swift
+//  LargeTimerView.swift
 //  HabitTracker
 //
-//  Created by Matthew Zierl on 10/3/24.
+//  Created by Matthew Zierl on 10/8/24.
 //
 
 import SwiftUI
 
-// TODO: Bug where exiting before pressing pause continues timer while still showing play button
-
-struct TimerView: View {
-    
+struct LargeTimerView: View {
     @State private var timerStart = Date.now
     @State private var timerCurrent = Date.now
-    @Binding var habit: Habit
     @Binding var timeBank: TimeInterval
     @State private var isPlaying = false
     
@@ -39,25 +35,13 @@ struct TimerView: View {
                         .foregroundStyle(.white)
                 }
             }
-            .font(.system(size: 20))
+            .font(.system(size: 28))
             
             Text(timeString(from: timeBank))
-                .frame(width: 150)
+                .frame(width: 100, height: 50)
                 .foregroundStyle(.white)
-                .font(.system(size: 20))
+                .font(.system(size: 22))
                 .padding()
-            
-            Button() {
-                // Deposit time
-                timer?.invalidate()
-                isPlaying = false
-                habit.progress += timeBank
-                timeBank = 0
-            } label: {
-                Image(systemName: "arrow.up.arrow.down.circle.fill")
-                    .foregroundStyle(.white)
-            }
-            .font(.system(size: 20))
             
         }
         .frame(maxWidth: .infinity, maxHeight: 50)
@@ -72,9 +56,7 @@ struct TimerView: View {
     }
 }
 
-
 #Preview {
     @Previewable @State var timeBank: TimeInterval = 0
-    @Previewable @State var habit = Habit(name: "Example", goal: 5, progress: 1, color: HabitColor(color: .blue), description: "description")
-    TimerView(habit: $habit, timeBank: $timeBank)
+    LargeTimerView(timeBank: $timeBank)
 }
