@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-class AllHabits {
-    var habits = [Habit]() {
+class AllHabits: ObservableObject {
+    @Published var habits = [Habit]() {
         didSet {
             print("habits now has \(habits.count) items")
             if let encoded = try? JSONEncoder().encode(habits) {

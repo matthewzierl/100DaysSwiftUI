@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var habits = AllHabits().habits
+    @StateObject private var allHabits = AllHabits()
     
     @State private var addHabitSheet = false
     @State private var timeBank: TimeInterval = 0
@@ -18,14 +18,14 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                HabitGalleryView(habits: $habits)
+                HabitGalleryView(habits: $allHabits.habits)
                 LargeTimerView(timeBank: $timeBank)
                 Spacer()
             }
             .navigationTitle("HabitTracker")
             .navigationDestination(for: Habit.self) { habit in
-                if let index = habits.firstIndex(where: { $0.id == habit.id }) {
-                    HabitDetailView(habit: $habits[index], timeBank: $timeBank)
+                if let index = allHabits.habits.firstIndex(where: { $0.id == habit.id }) {
+                    HabitDetailView(habit: $allHabits.habits[index], timeBank: $timeBank)
                 }
             }
             .toolbar {
@@ -34,7 +34,7 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $addHabitSheet) {
-                AddHabit(habits: $habits)
+                AddHabit(habits: $allHabits.habits)
             }
             .preferredColorScheme(.dark)
         }
