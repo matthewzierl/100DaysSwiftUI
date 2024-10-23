@@ -18,7 +18,7 @@ struct Result: Codable {
     var artworkUrl100: String
 }
 
-struct Materials: View {
+struct Day1Materials: View {
     @State private var results = [Result]()
     
     var body: some View {
@@ -72,5 +72,5 @@ struct Materials: View {
 }
 
 #Preview {
-    Materials()
+    Day1Materials()
 }
