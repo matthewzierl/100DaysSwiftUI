@@ -19,52 +19,35 @@ struct Result: Codable {
 }
 
 struct Day1Materials: View {
-    @State private var results = [Result]()
+    @State private var results: [Result] = []
     
     var body: some View {
-        AsyncImage(url: URL(string: "https://www.hackingwithswift.com/samples/img/logo.png")) { phase in
-            if let image = phase.image { // have an image
-                image
-                    .resizable()
-                    .scaledToFit()
-            } else if phase.error != nil { // error
-                Text("There was an error loading the image")
-            } else { // loading
-                ProgressView()
-            }
-        }
-        .frame(width: 200, height: 200)
-        
         List(results, id: \.trackId) { item in
             VStack(alignment: .leading) {
                 Text(item.trackName)
                     .font(.headline)
+                
                 Text(item.collectionName)
-                AsyncImage(url: URL(string: item.artworkUrl100))
+                
             }
         }
-        .task {
-            await loadData() // 'await' means a sleep might occur
+        
+        .task { // a sleep MIGHT occur here
+            await loadData()
         }
     }
     
-    func loadData() async { // 'async' might go to 'sleep'
-        
-        guard let url = URL(string: "https://itunes.apple.com/search?term=travis+scott&entity=song") else {
-            print("Invalid URL")
+    func loadData() async { // func might want to go to sleep to complete work
+        guard let url = URL(string: "https://itunes.apple.com/search?term=osamason&entity=song") else {
+            print("Invalid url")
             return
         }
         
         do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            
-            
+            let (data, _) = try await URLSession.shared.data(from: url) // need data, discard meta data about data with '_'
             if let decodedResponse = try? JSONDecoder().decode(Response.self, from: data) {
                 results = decodedResponse.results
-            } else {
-                print("Cannot decode data")
             }
-            
         } catch {
             print("Invalid data")
         }

@@ -12,7 +12,7 @@ class AllHabits: ObservableObject {
         didSet {
             print("habits now has \(habits.count) items")
             if let encoded = try? JSONEncoder().encode(habits) {
-                UserDefaults.standard.set(encoded, forKey: "Habits")
+                UserDefaults.standard.set(encoded, forKey: "Habits") // save new habits array to user defaults
             }
         }
     }
@@ -27,7 +27,7 @@ class AllHabits: ObservableObject {
                 fatalError("Could not decode habits from data")
             }
         } else {
-            habits = [] // empty array
+            habits = [] // empty array, nothing stored in user defaults
         }
     }
 }

@@ -16,13 +16,11 @@ struct HabitGalleryView: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                ForEach(habits) { habit in
-                    NavigationLink(value: habit) {
-                        if let index = habits.firstIndex(where: { $0.id == habit.id }) {
-                            ProgressView(habit: $habits[index])
-                                .padding(.top, 2)
-                                .padding(.bottom, 2)
-                        }
+                ForEach($habits) { $habit in
+                    NavigationLink(value: habit) { // provides a navigation link for each habit
+                        ProgressView(habit: $habit)
+                            .padding(.top, 2)
+                            .padding(.bottom, 2)
                     }
                 }
             }

@@ -28,14 +28,14 @@ struct AddHabit: View {
                     ColorPicker("Color", selection: $color)
                 }
                 Section("Goal"){
-                    Stepper("\(Int(goal)) minutes", value: $goal, in: 10 ... 720, step: 10)
+                    Stepper("\(Int(goal)) minutes", value: $goal, in: 10 ... 720, step: 5)
                 }
                 Section("Description") {
                     TextEditor(text: $description)
                         .frame(height: 200)
                 }
             }
-            .toolbarTitleDisplayMode(.inline)
+            .toolbarTitleDisplayMode(.inline) // makes title able to edit and at top
             .navigationTitle($name)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
