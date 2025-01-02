@@ -13,6 +13,7 @@ struct CheckoutView: View {
     
     @State private var confirmationMessage = ""
     @State private var showConfirmation = false
+    @State private var orderFailed = false
     
     var body: some View {
         ScrollView {
@@ -44,6 +45,11 @@ struct CheckoutView: View {
         } message: {
             Text(confirmationMessage)
         }
+        .alert("Order Failed", isPresented: $orderFailed) {
+            Button("OK") {}
+        } message: {
+            Text("Please check your internet connection and try again.")
+        }
     }
     
     func placeOrder() async {
@@ -63,10 +69,11 @@ struct CheckoutView: View {
             let (data, _) = try await URLSession.shared.upload(for: request, from: encoded)
             
             let decodedOrder = try JSONDecoder().decode(Order.self, from: data)
-            confirmationMessage = "Your order for \(decodedOrder.quantity)x \(Order.types[decodedOrder.type].lowercased()) cupcakes is on the way!"
+            confirmationMessage = "Your order for \(decodedOrder.quantity) \(Order.types[decodedOrder.type].lowercased()) cupcakes is on the way!"
             showConfirmation = true
         } catch {
             print("Checkout Failed: \(error.localizedDescription)")
+            orderFailed = true
         }
         
     }

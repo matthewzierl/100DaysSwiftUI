@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 @Observable
 class Order: Codable {
@@ -25,18 +26,54 @@ class Order: Codable {
         case _addSprinkles = "addSprinkles"
     }
     
+    
+    
     var type = 0
     var quantity = 3
     
-    var name: String = ""
-    var streetAddress: String = ""
-    var city: String = ""
-    var zip: String = ""
-    var phoneNumber: String = ""
-    var email: String = ""
+    var name: String {
+        didSet {
+            UserDefaults.standard.set(name, forKey: "name")
+        }
+    }
+    var streetAddress: String {
+        didSet {
+            UserDefaults.standard.set(streetAddress, forKey: "streetAddress")
+        }
+    }
+    var city: String {
+        didSet {
+            UserDefaults.standard.set(city, forKey: "city")
+        }
+    }
+    var zip: String {
+        didSet {
+            UserDefaults.standard.set(zip, forKey: "zip")
+        }
+    }
+    var phoneNumber: String {
+        didSet {
+            UserDefaults.standard.set(phoneNumber, forKey: "phoneNumber")
+        }
+    }
+    var email: String {
+        didSet {
+            UserDefaults.standard.set(email, forKey: "email")
+        }
+    }
+    
+    init() {
+        self.name = UserDefaults.standard.string(forKey: "name") ?? ""
+        self.streetAddress = UserDefaults.standard.string(forKey: "streetAddress") ?? ""
+        self.city = UserDefaults.standard.string(forKey: "city") ?? ""
+        self.zip = UserDefaults.standard.string(forKey: "zip") ?? ""
+        self.phoneNumber = UserDefaults.standard.string(forKey: "phoneNumber") ?? ""
+        self.email = UserDefaults.standard.string(forKey: "email") ?? ""
+        print("intializing order")
+    }
     
     var hasValidAddress: Bool {
-        if name.isEmpty || streetAddress.isEmpty || city.isEmpty || zip.isEmpty || phoneNumber.isEmpty || email.isEmpty {
+        if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || streetAddress.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || city.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || zip.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || phoneNumber.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return false
         }
         return true

@@ -15,7 +15,7 @@ struct AddressView: View {
         '@State' for observable objects is only used upon creation
      */
     @Bindable var order: Order
-    
+        
     var body: some View {
         Form {
             Section {
