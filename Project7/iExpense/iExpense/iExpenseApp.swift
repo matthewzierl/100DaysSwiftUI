@@ -14,5 +14,6 @@ struct iExpenseApp: App {
             ContentView()
 //            Materials()
         }
+        .modelContainer(for: ExpenseCategory.self, isAutosaveEnabled: true)
     }
 }

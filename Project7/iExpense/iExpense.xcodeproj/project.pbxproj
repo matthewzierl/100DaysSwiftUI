@@ -7,22 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B575830B2D2DCE22003122E1 /* ExpenseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B575830A2D2DCE22003122E1 /* ExpenseCategory.swift */; };
+		B575830D2D2DCEA0003122E1 /* ExpenseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B575830C2D2DCEA0003122E1 /* ExpenseItem.swift */; };
+		B57583112D2E21A2003122E1 /* AddCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57583102D2E21A2003122E1 /* AddCategory.swift */; };
+		B57583152D2F5FA9003122E1 /* ExpenseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57583142D2F5FA9003122E1 /* ExpenseListView.swift */; };
+		B57583172D2F768E003122E1 /* ExpenseItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57583162D2F768E003122E1 /* ExpenseItemView.swift */; };
+		B57583192D306364003122E1 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57583182D306364003122E1 /* FilterView.swift */; };
 		B5C392E42C9A87E7009DB54A /* iExpenseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C392E32C9A87E7009DB54A /* iExpenseApp.swift */; };
 		B5C392E62C9A87E7009DB54A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C392E52C9A87E7009DB54A /* ContentView.swift */; };
 		B5C392E82C9A87E8009DB54A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5C392E72C9A87E8009DB54A /* Assets.xcassets */; };
 		B5C392EB2C9A87E8009DB54A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5C392EA2C9A87E8009DB54A /* Preview Assets.xcassets */; };
 		B5DD3FD42C9B3E1E00412C58 /* Materials.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DD3FD32C9B3E0F00412C58 /* Materials.swift */; };
-		B5DD3FD82C9C84CF00412C58 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DD3FD72C9C84CF00412C58 /* AddView.swift */; };
+		B5DD3FD82C9C84CF00412C58 /* AddExpense.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DD3FD72C9C84CF00412C58 /* AddExpense.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B575830A2D2DCE22003122E1 /* ExpenseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseCategory.swift; sourceTree = "<group>"; };
+		B575830C2D2DCEA0003122E1 /* ExpenseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseItem.swift; sourceTree = "<group>"; };
+		B57583102D2E21A2003122E1 /* AddCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategory.swift; sourceTree = "<group>"; };
+		B57583142D2F5FA9003122E1 /* ExpenseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseListView.swift; sourceTree = "<group>"; };
+		B57583162D2F768E003122E1 /* ExpenseItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseItemView.swift; sourceTree = "<group>"; };
+		B57583182D306364003122E1 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		B5C392E02C9A87E7009DB54A /* iExpense.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iExpense.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C392E32C9A87E7009DB54A /* iExpenseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iExpenseApp.swift; sourceTree = "<group>"; };
 		B5C392E52C9A87E7009DB54A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B5C392E72C9A87E8009DB54A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B5C392EA2C9A87E8009DB54A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B5DD3FD32C9B3E0F00412C58 /* Materials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Materials.swift; sourceTree = "<group>"; };
-		B5DD3FD72C9C84CF00412C58 /* AddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
+		B5DD3FD72C9C84CF00412C58 /* AddExpense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpense.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +69,13 @@
 			children = (
 				B5C392E32C9A87E7009DB54A /* iExpenseApp.swift */,
 				B5C392E52C9A87E7009DB54A /* ContentView.swift */,
-				B5DD3FD72C9C84CF00412C58 /* AddView.swift */,
+				B57583182D306364003122E1 /* FilterView.swift */,
+				B57583142D2F5FA9003122E1 /* ExpenseListView.swift */,
+				B57583162D2F768E003122E1 /* ExpenseItemView.swift */,
+				B57583102D2E21A2003122E1 /* AddCategory.swift */,
+				B575830A2D2DCE22003122E1 /* ExpenseCategory.swift */,
+				B575830C2D2DCEA0003122E1 /* ExpenseItem.swift */,
+				B5DD3FD72C9C84CF00412C58 /* AddExpense.swift */,
 				B5DD3FD32C9B3E0F00412C58 /* Materials.swift */,
 				B5C392E72C9A87E8009DB54A /* Assets.xcassets */,
 				B5C392E92C9A87E8009DB54A /* Preview Content */,
@@ -143,10 +161,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B5DD3FD82C9C84CF00412C58 /* AddView.swift in Sources */,
+				B57583112D2E21A2003122E1 /* AddCategory.swift in Sources */,
+				B5DD3FD82C9C84CF00412C58 /* AddExpense.swift in Sources */,
+				B575830D2D2DCEA0003122E1 /* ExpenseItem.swift in Sources */,
+				B57583152D2F5FA9003122E1 /* ExpenseListView.swift in Sources */,
 				B5DD3FD42C9B3E1E00412C58 /* Materials.swift in Sources */,
+				B57583172D2F768E003122E1 /* ExpenseItemView.swift in Sources */,
 				B5C392E62C9A87E7009DB54A /* ContentView.swift in Sources */,
 				B5C392E42C9A87E7009DB54A /* iExpenseApp.swift in Sources */,
+				B57583192D306364003122E1 /* FilterView.swift in Sources */,
+				B575830B2D2DCE22003122E1 /* ExpenseCategory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

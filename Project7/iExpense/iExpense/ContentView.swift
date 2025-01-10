@@ -4,100 +4,84 @@
 //
 //  Created by Matthew Zierl on 9/17/24.
 //
+
+import SwiftData
 import SwiftUI
-
-
-struct ExpenseItem: Identifiable, Codable { // with 'identifiable' don't need 'id' in ForEach
-    var name: String
-    var type: String
-    var amount: Double
-    var id = UUID()
-}
-
-@Observable
-class Expenses {
-    var items = [ExpenseItem]() {
-        didSet { // whenever items changed, triggers this closure
-            if let encoded = try? JSONEncoder().encode(items) {
-                UserDefaults.standard.set(encoded, forKey: "Items")
-            }
-        }
-    }
-    
-    init () {
-        let jsonDecoder = JSONDecoder()
-        
-        if let data = UserDefaults.standard.data(forKey: "Items") {
-            if let decodedItems = try? jsonDecoder.decode([ExpenseItem].self, from: data) {
-                items = decodedItems
-            } else {
-                fatalError("Could not decode expenses from data")
-            }
-        } else {
-            items = [] // empty array
-        }
-    }
-}
 
 
 struct ContentView: View {
     
-    @State private var expenses = Expenses() // 'State' just keeps it alive bc it is class
+    @Environment(\.modelContext) var context
+    
     @State private var isShowingAddExpense = false
+    
+    @State private var categorySortOrder = [
+        SortDescriptor(\ExpenseCategory.categoryName)
+    ]
+    
+    @State private var itemSortOrder = [
+        SortDescriptor(\ExpenseItem.name),
+        SortDescriptor(\ExpenseItem.amount)
+    ]
+    
+    @State private var categoryFilter = ["Food"]
+    @State private var amountMaximum: Double = 10000
+    
+    @Query(sort: \ExpenseCategory.categoryName) var expenseCategories: [ExpenseCategory]
     
     
     var body: some View {
         NavigationStack {
-            List {
-                Section("Personal") {
-                    ForEach(expenses.items) { item in
-                        if item.type == "Personal" {
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text(item.name)
-                                        .font(.headline)
-                                    
-                                    Text(item.type)
-                                }
-                                Spacer()
-                                Text(item.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                                    .font(item.amount < 10 ? .caption : item.amount < 100 ? .body : .title)
-                                
-                            }
-                        }
-                    }
-                    .onDelete(perform: removeItems)
-                }
-                Section("Other") {
-                    ForEach(expenses.items) { item in
-                        if item.type != "Personal" {
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text(item.name)
-                                        .font(.headline)
-                                    
-                                    Text(item.type)
-                                }
-                                Spacer()
-                                Text(item.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                                    .font(item.amount < 10 ? .caption : item.amount < 100 ? .body : .title)
-                                
-                            }
-                        }
-                    }
-                    .onDelete(perform: removeItems)
-                }
-            }
-            
+            ExpenseListView(filterCategory: categoryFilter, maximumAmount: amountMaximum, categorySortOrder: categorySortOrder, itemSortOrder: $itemSortOrder)
             .navigationTitle("iExpense")
             .toolbar {
-//                Button("Add Expense", systemImage: "plus") {
-//                    isShowingAddExpense.toggle()
-//                }
+                Button("Clear") {
+                    do {
+                        let allCategories = try context.fetch(FetchDescriptor<ExpenseCategory>())
+                        for category in allCategories {
+                            context.delete(category)
+                        }
+                    } catch {
+                        print("Could not delete models: \(error)")
+                    }
+                }
                 NavigationLink {
-                    AddView(expenses: expenses)
+                    FilterView(categorySelection: $categoryFilter, maximumAmount: $amountMaximum)
                 } label: {
-                    Image(systemName: "plus")
+                    Text("Filter")
+                }
+                
+                Menu("Sort by", systemImage: "arrow.up.arrow.down") {
+                    Menu("Category") {
+                        Button("Name") {
+                            categorySortOrder = [SortDescriptor(\ExpenseCategory.categoryName)]
+                        }
+                    }
+                    Menu("Item") {
+                        Button("Name") {
+                            itemSortOrder = [SortDescriptor(\ExpenseItem.name), SortDescriptor(\ExpenseItem.amount)]
+                        }
+                        Button("Amount") {
+                            itemSortOrder = [SortDescriptor(\ExpenseItem.amount),
+                                             SortDescriptor(\ExpenseItem.name)]
+                        }
+                    }
+                }
+                Menu("Create New") {
+                    
+                    // Add Expense
+                    NavigationLink {
+                        AddExpense()
+                    } label: {
+                        Text("Expense")
+                    }
+                    
+                    // Add Category
+                    NavigationLink {
+                        AddCategory()
+                    } label: {
+                        Text("Category")
+                    }
                 }
 
             }
@@ -110,9 +94,9 @@ struct ContentView: View {
     }
     
     
-    func removeItems(at offset: IndexSet) {
-        expenses.items.remove(atOffsets: offset)
-    }
+//    func removeItems(at offset: IndexSet) {
+//        expenses.items.remove(atOffsets: offset)
+//    }
     
 }
 
