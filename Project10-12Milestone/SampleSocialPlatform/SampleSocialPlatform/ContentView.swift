@@ -5,13 +5,15 @@
 //  Created by Matthew Zierl on 1/10/25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct ContentView: View {
     
     var socialPlatformURL: URL = URL(string: "https://www.hackingwithswift.com/samples/friendface.json")! // force unwrap because we know this link works
     
-    @State var allUsers = [User]()
+    @Query var allUsers: [User]
+    @Environment(\.modelContext) var context
     
     var body: some View {
         NavigationStack {
@@ -28,7 +30,11 @@ struct ContentView: View {
         }
         .task { // perform async task before view appears
             do {
-                try await allUsers = loadUsers()
+                guard allUsers.isEmpty else {
+                    print("USERS ALREADY MANAGED BY SWIFTDATA")
+                    return
+                } // check not already loaded
+                try await loadUsers()
             } catch {
                 print("Could not load users: \(error)")
             }
@@ -43,7 +49,7 @@ struct ContentView: View {
         DELETE: Deleting Existing Data
      
      */
-    func loadUsers() async throws -> [User] {
+    func loadUsers() async throws {
         
 //        var request = URLRequest(url: socialPlatformURL)
 //        request.setValue( "Application/json", forHTTPHeaderField: "Content-Type")
@@ -58,7 +64,10 @@ struct ContentView: View {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
-            return try decoder.decode([User].self, from: data)
+            let loadedUsers = try decoder.decode([User].self, from: data)
+            for user in loadedUsers {
+                context.insert(user)
+            }
         } catch {
             throw SocialPlatformError.invalidData
         }
