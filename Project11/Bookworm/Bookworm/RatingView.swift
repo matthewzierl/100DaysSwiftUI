@@ -37,7 +37,8 @@ struct RatingView: View {
             .buttonStyle(.plain) // somehow allows SwiftUI to treat each button individually???
             .accessibilityElement()
             .accessibilityLabel(label)
-            .accessibilityValue(rating == 1 ? "1 start" : "(\(rating) stars")            .accessibilityAdjustableAction { direction in
+            .accessibilityValue(rating == 1 ? "1 star" : "(\(rating) stars")
+            .accessibilityAdjustableAction { direction in
                 switch direction {
                 case .increment:
                     if rating < maxRating {

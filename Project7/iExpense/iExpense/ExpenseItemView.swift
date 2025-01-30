@@ -31,6 +31,9 @@ struct ExpenseItemView: View {
                 Text(item.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                     .font(item.amount < 10 ? .caption : item.amount < 100 ? .body : .title)
             }
+            .accessibilityElement()
+            .accessibilityLabel("\(item.name), \(item.amountString)")
+            .accessibilityHint(item.category?.categoryName ?? "Unknown Category")
         }
     }
     

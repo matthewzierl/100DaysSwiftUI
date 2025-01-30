@@ -37,6 +37,7 @@ struct AddExpense: View {
                 }
                 
                 TextField("Amount", value: $amount, format: .currency(code: "USD"))
+                    .keyboardType(.decimalPad)
                 
             }
             .onAppear {
