@@ -16,26 +16,32 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            List(allContacts) { contact in
-                NavigationLink(destination: ContactDetailView(contact: contact)) {
-                    HStack {
-                        if let photo = contact.photo {
-                            photo
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 50, height: 50)
-                                .clipShape(Circle())
-                        } else {
-                            Image(.defaultpfp)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 50, height: 50)
-                                .clipShape(Circle())
+            List() {
+                ForEach(allContacts) { contact in
+                    
+                    NavigationLink(destination: ContactDetailView(contact: contact)) {
+                        HStack {
+                            if let photo = contact.photo {
+                                photo
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                            } else {
+                                Image(.defaultpfp)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                            }
+                            Text("\(contact.firstName) \(contact.lastName)")
                         }
-                        Text("\(contact.firstName) \(contact.lastName)")
                     }
+                
                 }
+                .onDelete(perform: delete)
             }
+            
             
             
             .toolbar {
@@ -46,6 +52,12 @@ struct ContentView: View {
             .sheet(isPresented: $showAddContactSheet) { AddContactView() }
             .navigationTitle("iFace")
         }
+    }
+    
+    func delete(at offsets: IndexSet) {
+        
+//        let deletedContact =
+//        modelContext.delete(allContacts[offsets.first!])
     }
 }
 

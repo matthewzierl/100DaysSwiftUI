@@ -5,6 +5,7 @@
 //  Created by Matthew Zierl on 2/3/25.
 //
 
+import MapKit
 import SwiftUI
 
 struct ContactDetailView: View {
@@ -12,6 +13,7 @@ struct ContactDetailView: View {
     @Bindable var contact: Contact
     
     @State private var showEditContact: Bool = false
+    
     
     
     var body: some View {
@@ -39,6 +41,18 @@ struct ContactDetailView: View {
                 }
                 Section("Description") {
                     Text(contact.contactDescription)
+                }
+                Section("Location") {
+                    if let mapLat = contact.lat, let mapLon = contact.lon {
+                        let position = MapCameraPosition.region(
+                            MKCoordinateRegion(
+                                center: CLLocationCoordinate2D(latitude: mapLat, longitude: mapLon),
+                                span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1))
+                        )
+                        NavigationLink("Link", destination: PhotoLocationView(location: position))
+                    } else {
+                        Text("No Location Information Available")
+                    }
                 }
             }
             

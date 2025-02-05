@@ -6,15 +6,8 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		B575854A2D5181F6003122E1 /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57585492D5181F6003122E1 /* ContactDetailView.swift */; };
-		B575854C2D518885003122E1 /* EditContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B575854B2D518885003122E1 /* EditContactView.swift */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		B57584D32D4E8172003122E1 /* iFace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iFace.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		B57585492D5181F6003122E1 /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
-		B575854B2D518885003122E1 /* EditContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContactView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -39,8 +32,6 @@
 		B57584CA2D4E8172003122E1 = {
 			isa = PBXGroup;
 			children = (
-				B575854B2D518885003122E1 /* EditContactView.swift */,
-				B57585492D5181F6003122E1 /* ContactDetailView.swift */,
 				B57584D52D4E8172003122E1 /* iFace */,
 				B57584D42D4E8172003122E1 /* Products */,
 			);
@@ -128,8 +119,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B575854A2D5181F6003122E1 /* ContactDetailView.swift in Sources */,
-				B575854C2D518885003122E1 /* EditContactView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

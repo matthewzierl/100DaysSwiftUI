@@ -27,12 +27,29 @@ class Contact: Comparable, Identifiable, Hashable {
     @Attribute(.externalStorage) var imageData: Data?
     var photo: Image? {
         guard let data = imageData else { return nil }
-        guard let convertedImage = UIImage(data: data) else { return nil}
-        return Image(uiImage: convertedImage)
+        guard let convertedUImage = UIImage(data: data) else { return nil}
+        
+        if let convertedCIImage = CIImage(data: data) {
+            let properties = convertedCIImage.properties
+            
+            if let gps = properties[kCGImagePropertyGPSDictionary as String] as? [String: Any] {
+                lat = gps[kCGImagePropertyGPSLatitude as String] as? Double
+                lon = gps[kCGImagePropertyGPSLongitude as String] as? Double
+            } else {
+//                print("Could not get gps data from properties")
+            }
+        } else {
+//            print("Could not convert to CIImage")
+        }
+        
+        return Image(uiImage: convertedUImage)
     }
+    
     var relationshipType: Relationship?
     var contactDescription: String
     var id: UUID
+    var lat: Double?
+    var lon: Double?
     
     init(firstName: String, lastName: String, imageData: Data?, relationshipType: Relationship?, contactDescription: String) {
         self.firstName = firstName
